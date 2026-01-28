@@ -1,0 +1,27 @@
+# Synaptic Intel: AI Learning Resources for Beginners
+
+## Recommended GitHub Repositories
+- **TensorFlow**: Comprehensive tutorials and examples for building ML models.
+- **Scikit-learn**: Essential for understanding machine learning algorithms (regression, classification, clustering).
+- **PyTorch**: Simple neural network examples and deep learning frameworks.
+- **fastai**: Simplifies training neural networks, built on top of PyTorch.
+- **Keras**: Beginner-friendly high-level neural networks API.
+
+## Educational Resources
+- **AI for Everyone (Andrew Ng)**: Foundational AI concepts.
+- **Google AI Education**: Variety of tutorials tailored for beginners.
+- **Kaggle**: Practical exercises and data science competitions.
+- **Machine Learning Crash Course (Google)**: Theory combined with practical exercises.
+
+## Foundational Reading
+- **Pattern Recognition and Machine Learning (Christopher Bishop)**: Deep dive into ML theory and foundations.
+
+## Common Features in AI Projects
+- **Stock Market**: ML algorithms + data visualization.
+- **E-commerce**: Recommendation systems (collaborative filtering), churn prediction.
+- **OCR**: Handwriting recognition (MNIST dataset).
+
+## Industry Trends (2025-2026)
+- **Generative AI Integration**: Moving beyond basic ML to LLM-powered applications.
+- **Autonomous Agents**: Self-learning bots and workplace productivity tools.
+- **Model Context Protocol (MCP)**: Standardizing how LLMs interact with external resources.

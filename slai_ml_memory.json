@@ -1,0 +1,32 @@
+{
+  "classCounts": {
+    "web_attack": 14,
+    "ssh_brute": 10,
+    "adb_exploit": 10
+  },
+  "featureCounts": {
+    "web_attack": {
+      "port_80": 12,
+      "port_443": 10,
+      "http": 10
+    },
+    "ssh_brute": {
+      "port_22": 10,
+      "ssh": 10
+    },
+    "adb_exploit": {
+      "port_5555": 10,
+      "android": 10
+    }
+  },
+  "vocab": [
+    "port_80",
+    "port_443",
+    "http",
+    "port_22",
+    "ssh",
+    "port_5555",
+    "android"
+  ],
+  "totalDocs": 34
+}

@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+import os
+import subprocess
+from pathlib import Path
+
+# ====== CONFIGURATION ======
+# Piper TTS model paths (if you have them)
+PIPER_MODEL_PATH = "/home/korri/piper_models/en_US-kristen-medium.onnx"
+PIPER_VOICE_JSON = "/home/korri/piper_models/en_US-kristen-medium.onnx.json"
+
+# Directory to store generated speech
+AUDIO_DIR = Path.home() / "ironman_audio"
+AUDIO_DIR.mkdir(exist_ok=True)
+
+# ====== FUNCTIONS ======
+def speak_piper(text: str, filename: str):
+    """Generate speech using Piper TTS"""
+    try:
+        # Ensure piper CLI is installed
+        subprocess.run([
+            "piper", 
+            "-m", PIPER_MODEL_PATH,
+            "-c", PIPER_VOICE_JSON,
+            "-t", text,
+            "-o", str(filename)
+        ], check=True)
+        print(f"[PIPER] Generated: {filename}")
+    except Exception as e:
+        print(f"[PIPER ERROR] {e}")
+        return False
+    return True
+
+def speak_espeak(text: str, filename: str):
+    """Generate speech using espeak-ng to WAV file"""
+    try:
+        subprocess.run([
+            "espeak-ng",
+            "-v", "en-us",
+            text,
+            "--stdout"
+        ], check=True, stdout=open(filename, "wb"))
+        print(f"[ESPEAK] Generated: {filename}")
+    except Exception as e:
+        print(f"[ESPEAK ERROR] {e}")
+        return False
+    return True
+
+def speak(text: str):
+    """Main TTS function"""
+    # Generate a unique filename
+    counter = len(list(AUDIO_DIR.glob("*.wav"))) + 1
+    filename = AUDIO_DIR / f"speech_{counter}.wav"
+
+    # Try Piper first
+    if Path(PIPER_MODEL_PATH).exists() and Path(PIPER_VOICE_JSON).exists():
+        if speak_piper(text, filename):
+            return filename
+
+    # Fallback to espeak-ng
+    if speak_espeak(text, filename):
+        return filename
+
+    print("[ERROR] Could not generate speech!")
+    return None
+
+def play_audio(filename: Path):
+    """Play the WAV file if audio device exists"""
+    if filename.exists():
+        try:
+            subprocess.run(["aplay", str(filename)])
+        except Exception as e:
+            print(f"[PLAYBACK ERROR] {e}")
+
+# ====== MAIN ======
+if __name__ == "__main__":
+    print("System online. Audio output confirmed.")
+    file = speak("System online. Audio output confirmed.")
+    if file:
+        play_audio(file)

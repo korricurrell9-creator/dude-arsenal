@@ -1,0 +1,84 @@
+# Synaptic Intel: 104 Hacking Tools and Resources (2026 Refresh)
+
+## Web Proxy & Manipulation
+- **Burp Suite**: Essential web app hacking tool. Extensions: ActiveScan++, Autorize, Logger++, js-link finder.
+- **Caido.io**: Lightweight Rust-based alternative to Burp.
+- **OWASP ZAP**: Open source alternative for web app scanning.
+- **FoxyProxy**: Browser extension for managing proxy settings.
+
+## Web Hacking & Fuzzing
+- **Ffuf**: Fast web fuzzer (Go).
+- **Dirsearch**: Directory brute-forcing.
+- **Wfuzz**: Web application brute-forcing.
+- **Jsluice**: Extract secrets/URLs from JS.
+- **Virtual-host-discovery**: Enumerate virtual hosts.
+- **WPScan**: WordPress security scanner.
+- **WhatWeb / Wappalyzer / BuiltWith**: Tech stack fingerprinting.
+
+## Reconnaissance & OSINT
+- **Amass**: Network mapping and asset discovery.
+- **Subfinder**: Passive subdomain discovery.
+- **Assetfinder / Waybacks / Gau**: URL and asset discovery.
+- **Shodan / Censys**: Internet-wide asset search engines.
+- **Spiderfoot**: OSINT automation.
+- **Recon-ng**: Web-based reconnaissance framework.
+- **bbot**: All-in-one OSINT/Recon scanner.
+- **reconFTW / Osmedeus**: Automated recon pipelines.
+- **Google Dorks / GitHub Dorks**: Passive info gathering.
+
+## DNS & Subdomains
+- **Massdns / Puredns**: High-performance DNS resolution.
+- **Dnsgen / Gotator**: Subdomain permutation generation.
+- **Subjack**: Subdomain takeover detection.
+- **Findomain**: Domain monitoring.
+- **Chaos**: Internet-wide asset data.
+
+## Network & Infrastructure
+- **Nmap**: The standard for network discovery and auditing.
+- **Masscan**: Internet-scale port scanner.
+- **Naabu**: Fast port scanner (Go).
+- **NetExec (nxc)**: Network pentesting (SMB/WinRM spraying).
+- **Bettercap**: Network attack/monitoring framework (ARP spoofing, sniffing).
+- **Wireshark**: Network protocol analyzer.
+
+## Cloud Security
+- **Prowler**: AWS/Azure/GCP security assessment.
+- **Pacu**: AWS exploitation framework.
+
+## Active Directory
+- **BloodHound Community Edition**: AD attack path mapping.
+- **Ligolo-ng**: Pivoting and tunneling.
+- **Responder**: LLMNR/NBT-NS poisoning.
+
+## Web & API Exploitation
+- **Feroxbuster**: Rust-based content discovery.
+- **Kiterunner**: API endpoint discovery.
+- **Arjun**: Hidden HTTP parameter discovery.
+- **Interactsh**: OOB interaction server (blind SSRF/RCE).
+- **Dalfox**: XSS scanner.
+- **Semgrep**: Static Application Security Testing (SAST).
+- **Sqlmap**: Automated SQL injection exploitation.
+- **Ysoserial**: Java deserialization payload generator.
+- **SSRFTest**: SSRF testing.
+
+## Mobile Hacking
+- **MobSF**: Mobile Security Framework (static/dynamic analysis).
+- **Frida**: Dynamic instrumentation toolkit.
+- **Jadx**: Android to Java decompiler.
+- **Genymotion**: Android emulator.
+
+## Secrets & Passwords
+- **TruffleHog**: Secrets finding in code.
+- **Hashcat**: GPU-based password cracking.
+- **Seclists**: Wordlists for everything.
+
+## AI & LLM Tools
+- **ChatGPT / Claude**: Logic and code assistance.
+- **Local LLMs (Llama 3)**: Private AI assistance.
+- **Azure/PyRIT**: Risk identification for Generative AI.
+- **Arcanum Cyber Security Bot**: Ethical hacking assistant.
+
+## General Utility
+- **Obsidian**: Knowledge management.
+- **CyberChef**: Data decoding and analysis.
+- **Axiom**: Distributed scanning fleet management.

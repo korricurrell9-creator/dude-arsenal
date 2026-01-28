@@ -1,0 +1,16 @@
+#!/bin/bash
+TARGET_PKG=$1
+
+if [ -z "$TARGET_PKG" ]; then
+    echo "DUDE: You forgot the package name! Usage: ./dude-inject <com.example.app>"
+    exit 1
+fi
+
+if [ ! -f "dude_ultimate_bypass.js" ]; then
+    echo "DUDE: Where is dude_ultimate_bypass.js? I can't find it!"
+    exit 1
+fi
+
+echo "DUDE: Smashing protections on $TARGET_PKG..."
+# We assume the user has activated the objection-env or has frida installed globally
+frida -U -f "$TARGET_PKG" -l $(pwd)/dude_ultimate_bypass.js

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EPIC GAMES - REWARD</title>
+<style>
+body { 
+    background-color: #1a1a1a; 
+    color: white; 
+    font-family: sans-serif; 
+    text-align: center; 
+    padding-top: 50px;
+}
+.card {
+    background: linear-gradient(45deg, #9933ff, #0066ff);
+    border-radius: 15px;
+    padding: 20px;
+    display: inline-block;
+    border: 2px solid #ffff00;
+    box-shadow: 0 0 20px #9933ff;
+}
+h1 { color: #ffff00; font-style: italic; }
+.btn {
+    background-color: #ffff00;
+    color: black;
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="card">
+    <h1>CONGRATULATIONS!</h1>
+    <h2>5,000 V-BUCKS UNLOCKED</h2>
+    <p>Exclusive reward for being a loyal player.</p>
+    <p>Tap the button below to claim directly to your account.</p>
+    <button class="btn" onclick="exploit()">CLAIM NOW</button>
+</div>
+
+<script>
+function exploit() {
+    // THE TRAP
+    document.body.innerHTML = "<h1 style='color:red; font-size:50px;'>DUDE: SYSTEM COMPROMISED</h1><p>Never trust free gifts.</p>";
+    alert("DUDE: ACCESS GRANTED. SHELL UPLOADED.");
+}
+</script>
+</body>
+</html>

