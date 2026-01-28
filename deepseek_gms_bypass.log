@@ -1,0 +1,30 @@
+     ____
+    / _  |   Frida 17.6.0 - A world-class dynamic instrumentation toolkit
+   | (_| |
+    > _  |   Commands:
+   /_/ |_|       help      -> Displays the help system
+   . . . .       object?   -> Display information about 'object'
+   . . . .       exit/quit -> Exit
+   . . . .
+   . . . .   More info at https://frida.re/docs/home/
+   . . . .
+   . . . .   Connected to SM T590 (id=192.168.0.38:39284)
+Spawning `com.deepseek.chat`...
+Spawned `com.deepseek.chat`. Resuming main thread!
+[SM T590::com.deepseek.chat ]-> [*] DUDE: Initializing GMS Mock Bypass...
+[-] DUDE: GoogleApiAvailability not found in app (skipping).
+[*] DUDE: GMS Mock Bypass Active.
+[*] DUDE: DeepSeek Bypass v6 - Full be.s Restoration...
+[+] DUDE: Bypassing connectToLicensingService.
+[!] DUDE: ja.b.c caught exception: Error: java.lang.NullPointerException: Attempt to invoke virtual method 'byte[] java.lang.String.getBytes()' on a null object reference
+[+] DUDE: Returning new be.s instance to satisfy caller.
+[!] DUDE: ja.b.c caught exception: Error: java.lang.NullPointerException: Attempt to invoke virtual method 'byte[] java.lang.String.getBytes()' on a null object reference
+[+] DUDE: Returning new be.s instance to satisfy caller.
+[!] DUDE: ja.b.c caught exception: Error: java.lang.NullPointerException: Attempt to invoke virtual method 'byte[] java.lang.String.getBytes()' on a null object reference
+[+] DUDE: Returning new be.s instance to satisfy caller.
+[!] DUDE: ja.b.c caught exception: Error: java.lang.NullPointerException: Attempt to invoke virtual method 'byte[] java.lang.String.getBytes()' on a null object reference
+[+] DUDE: Returning new be.s instance to satisfy caller.
+[!] DUDE: ja.b.c caught exception: Error: java.lang.NullPointerException: Attempt to invoke virtual method 'byte[] java.lang.String.getBytes()' on a null object reference
+[+] DUDE: Returning new be.s instance to satisfy caller.
+
+Thank you for using Frida!

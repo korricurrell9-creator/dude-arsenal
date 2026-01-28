@@ -1,0 +1,18 @@
+     ____
+    / _  |   Frida 17.6.0 - A world-class dynamic instrumentation toolkit
+   | (_| |
+    > _  |   Commands:
+   /_/ |_|       help      -> Displays the help system
+   . . . .       object?   -> Display information about 'object'
+   . . . .       exit/quit -> Exit
+   . . . .
+   . . . .   More info at https://frida.re/docs/home/
+   . . . .
+   . . . .   Connected to SM T590 (id=192.168.0.38:39284)
+Spawning `com.deepseek.chat`...
+Spawned `com.deepseek.chat`. Resuming main thread!
+[SM T590::com.deepseek.chat ]-> [*] DUDE: DeepSeek / PairIP Bypass Initializing...
+[+] DUDE: PairIP LicenseClient hooks applied.
+[+] DUDE: Bypassing connectToLicensingService exception.
+
+Thank you for using Frida!
