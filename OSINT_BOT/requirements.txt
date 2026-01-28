@@ -1,0 +1,18 @@
+# Arsenal Manifest for Project DΞMON CORE
+# Each dependency is a weapon. Use them with precision.
+
+# For raw HTTP/SOCKS transit & Tor access
+requests[socks]
+
+# For Telegram nervous system integration
+telethon
+
+# For surgical HTML/XML dissection
+beautifulsoup4
+lxml
+
+# For intelligence data structuring
+pandas
+
+# For phantom browser emulation (JS-heavy targets)
+selenium
